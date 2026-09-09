@@ -42,4 +42,31 @@ class PatrimonasaFlowTest extends TestCase
         $this->actingAs($user)->post(route('trash.asset.restore', $asset->id))->assertRedirect();
         $this->assertDatabaseHas('assets', ['id' => $asset->id, 'deleted_at' => null]);
     }
+
+    public function test_registration_closes_after_first_account(): void
+    {
+        $this->get(route('register'))->assertOk();
+
+        $this->post(route('register.store'), [
+            'name' => 'Primera cuenta',
+            'email' => 'primera@familia.es',
+            'password' => 'secreta123',
+            'password_confirmation' => 'secreta123',
+        ])->assertRedirect(route('home'));
+
+        $this->assertEquals('admin', User::where('email', 'primera@familia.es')->firstOrFail()->role);
+
+        $this->post(route('logout'))->assertRedirect(route('login'));
+
+        $this->get(route('register'))->assertRedirect(route('login'));
+
+        $this->post(route('register.store'), [
+            'name' => 'Intruso',
+            'email' => 'intruso@example.com',
+            'password' => 'secreta123',
+            'password_confirmation' => 'secreta123',
+        ])->assertRedirect(route('login'));
+
+        $this->assertDatabaseMissing('users', ['email' => 'intruso@example.com']);
+    }
 }

@@ -72,11 +72,27 @@ vendor/bin/pint --test # estilo PHP
 
 ---
 
+## 🌐 Despliegue en Loading (producción)
+
+Dominio: `https://patrimonio.casetashormigon.es` · Código en `/patrimonio.casetashormigon.es/app` · PHP `/ldnwebserver/php83/bin/php` (8.3).
+
+### Primera puesta en marcha
+
+1. **Raíz de documentos** del subdominio → carpeta `public` del proyecto (valor a indicar en el panel: `/patrimonio.casetashormigon.es/app/public`). Nunca la raíz del proyecto.
+2. **`.env`**: copiar `.env.production.example` a `.env`, rellenar `DB_*` y generar clave solo si no existe: `php artisan key:generate --force`.
+3. **Interfaz**: en local `npm run build`, anotar `git rev-parse HEAD > public/build/.deploy-commit` y subir `public/build` al servidor (sin Node allí).
+4. **Actualizar**: `bash /patrimonio.casetashormigon.es/app/scripts/deploy-loading.sh` (comprueba versión, extensiones, copia `.env`/BD, actualiza `main` sin sobrescribir nada, instala, migra y regenera cachés).
+5. **Primera cuenta**: entra en el dominio y usa «Crear cuenta familiar» (esa cuenta queda como administradora y el registro se cierra solo).
+
+El registro público queda cerrado cuando ya existe una cuenta; los documentos y fotos solo se sirven a usuarios identificados. Si una actualización falla, el script reabre el servicio y deja copia en `../copias-seguridad`; detalles en la cabecera del script.
+
+---
+
 ## ✅ Estado y pendientes
 
 ### Disponible
 
-- Acceso privado con cuentas familiares; la primera cuenta se convierte en administradora.
+- Acceso privado con cuentas familiares; la primera cuenta se convierte en administradora y el registro se cierra automáticamente.
 - Inicio con buscador global, categorías y accesos rápidos.
 - Crear, editar, marcar como favorito y archivar bienes sin formularios interminables.
 - Categorías creadas y archivadas desde la aplicación.

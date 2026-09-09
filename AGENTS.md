@@ -80,3 +80,4 @@ vendor/bin/pint --test                # lint (fix: vendor/bin/pint)
 | 2026-09-09 | UX | Firma visible y animada en el pie de la interfaz: «Hecho por Ángel Muñoz con mucho cariño», con respeto por la reducción de movimiento. |
 | 2026-09-09 | UX | Navegación con flecha «Volver» grande y visible en todas las pantallas internas, corrección de errores de diseño (cabeceras móviles, acciones de fotos táctiles, desplegable de categorías y resultados de búsqueda con bienes y documentos). |
 | 2026-09-09 | Repo | Primera subida completa a `origin/main`: historiales unificados conservando ambos inicios y código Patrimonasa publicado. |
+| 2026-09-09 | Despliegue | Preparación Loading (`patrimonio.casetashormigon.es`): build Vite verificado, registro cerrado tras la primera cuenta, plantilla `.env.production.example` y script `scripts/deploy-loading.sh` con copia, migraciones y cachés. Sin acceso SSH/SFTP configurado ni BD de producción todavía. |

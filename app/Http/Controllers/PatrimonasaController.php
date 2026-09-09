@@ -35,11 +35,19 @@ class PatrimonasaController extends Controller
 
     public function register()
     {
+        if (User::exists()) {
+            return redirect()->route('login')->withErrors(['email' => 'El registro está cerrado. Entra con tu cuenta familiar.']);
+        }
+
         return view('auth.register');
     }
 
     public function storeUser(Request $request)
     {
+        if (User::exists()) {
+            return redirect()->route('login')->withErrors(['email' => 'El registro está cerrado. Entra con tu cuenta familiar.']);
+        }
+
         $data = $request->validate(['name' => ['required', 'string', 'max:100'], 'email' => ['required', 'email', 'unique:users'], 'password' => ['required', 'confirmed', 'min:8']]);
         $data['password'] = Hash::make($data['password']);
         $data['role'] = User::count() === 0 ? 'admin' : 'family';
