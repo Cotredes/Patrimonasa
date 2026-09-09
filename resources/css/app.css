@@ -2,8 +2,50 @@
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    --color-ink: #24352f;
+    --color-moss: #2f6655;
+    --color-sage: #e8f0e9;
+    --color-paper: #fbfaf6;
+    --color-sand: #f2ecdf;
+    --color-coral: #b75d45;
 }
+
+:root { color-scheme: light; }
+html { font-size: 17px; scroll-behavior: smooth; }
+body { background: #fbfaf6; color: #24352f; }
+button, a, input, select, textarea { font: inherit; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #d39255; outline-offset: 3px; }
+.paper-card { background: white; border: 1px solid #e5e7df; border-radius: 1.25rem; box-shadow: 0 10px 30px rgba(36,53,47,.06); }
+.primary-button { display:inline-flex; align-items:center; justify-content:center; gap:.55rem; min-height:3.15rem; padding:.7rem 1.15rem; border-radius:.8rem; background:#2f6655; color:white; font-weight:700; transition:.2s; }
+.primary-button:hover { background:#244f42; transform:translateY(-1px); }
+.soft-button { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; min-height:3rem; padding:.65rem 1rem; border-radius:.75rem; background:#e8f0e9; color:#244f42; font-weight:700; }
+.soft-button:hover { background:#d7e7da; }
+.quiet-button { display:inline-flex; align-items:center; justify-content:center; gap:.45rem; min-height:2.8rem; padding:.55rem .8rem; border-radius:.7rem; color:#426056; font-weight:600; }
+.quiet-button:hover { background:#eef3ed; }
+.danger-button { color:#9a402e; background:#fff0ec; }
+.back-wrap { margin-bottom:1.25rem; }
+.back-button { display:inline-flex; align-items:center; gap:.7rem; min-height:3.25rem; padding:.6rem 1.1rem .6rem .6rem; border-radius:999px; background:#fff; border:2px solid #2f6655; color:#244f42; font-weight:800; font-size:1.05rem; line-height:1; box-shadow:0 6px 18px rgba(36,53,47,.08); transition:transform .15s ease, background .15s ease; }
+.back-button:hover { background:#e8f0e9; transform:translateX(-2px); }
+.back-arrow { display:grid; place-items:center; width:2.4rem; height:2.4rem; border-radius:999px; background:#2f6655; color:#fff; font-size:1.35rem; font-weight:800; flex:none; }
+.page-head { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+.list-row { display:flex; align-items:center; gap:.9rem; padding:1rem; }
+.list-row-actions { display:flex; gap:.5rem; flex-wrap:wrap; margin-left:auto; flex:none; }
+@media (max-width: 640px) { .list-row { flex-wrap:wrap; } .list-row-actions { width:100%; margin-left:0; } .list-row-actions > * { flex:1 1 auto; } }
+.signature-card { position:relative; display:flex; align-items:center; justify-content:center; gap:.75rem; overflow:hidden; border:1px solid #ead8bd; border-radius:999px; background:linear-gradient(110deg,#fffaf0,#f7eddd,#fffaf0); padding:.9rem 1.4rem; box-shadow:0 8px 22px rgba(183,93,69,.08); }
+.signature-card::after { position:absolute; inset:0; content:""; background:linear-gradient(105deg,transparent 25%,rgba(255,255,255,.65) 50%,transparent 75%); transform:translateX(-120%); animation:signature-shine 6s ease-in-out infinite; }
+.signature-text { position:relative; z-index:1; color:#8c573b; font-size:clamp(1.05rem,2.4vw,1.35rem); font-weight:800; letter-spacing:-.02em; }
+.signature-spark { position:relative; z-index:1; color:#c4773e; font-size:1.2rem; animation:signature-sparkle 2.8s ease-in-out infinite; }
+.signature-spark:last-child { animation-delay:1.4s; }
+@keyframes signature-shine { 0%, 62% { transform:translateX(-120%); } 78%, 100% { transform:translateX(120%); } }
+@keyframes signature-sparkle { 0%, 100% { opacity:.45; transform:scale(.85) rotate(0); } 50% { opacity:1; transform:scale(1.15) rotate(12deg); } }
+@media (prefers-reduced-motion: reduce) { .signature-card::after, .signature-spark { animation:none; } }
+.field { width:100%; border:1px solid #cfd8ce; background:#fff; border-radius:.7rem; padding:.8rem .9rem; min-height:3.1rem; color:#24352f; }
+.field:focus { border-color:#2f6655; box-shadow:0 0 0 3px #dcebe0; outline:none; }
+.label { display:block; font-weight:700; margin-bottom:.45rem; color:#30473f; }
+.muted { color:#64756e; }
+.eyebrow { color:#b75d45; text-transform:uppercase; letter-spacing:.12em; font-size:.76rem; font-weight:800; }
+@media (max-width: 640px) { html { font-size:16px; } .mobile-stack { flex-direction:column; align-items:stretch; } .mobile-stack > * { width:100%; } }

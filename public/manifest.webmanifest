@@ -1,0 +1,11 @@
+{
+  "name": "Patrimonasa",
+  "short_name": "Patrimonasa",
+  "description": "El archivo familiar de bienes y documentos",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbfaf6",
+  "theme_color": "#2f6655",
+  "lang": "es",
+  "icons": []
+}

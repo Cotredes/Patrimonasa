@@ -1,0 +1,2 @@
+@if (session('success'))<div class="mb-6 rounded-xl border border-[#bcd9c3] bg-[#edf8ef] px-4 py-3 font-semibold text-[#285c3c]" role="status">✓ {{ session('success') }}</div>@endif
+@if ($errors->any())<div class="mb-6 rounded-xl border border-[#e9c4b9] bg-[#fff3ef] px-4 py-3 text-[#8d3b2c]" role="alert"><strong>Revisa estos datos:</strong><ul class="mt-1 list-inside list-disc">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
