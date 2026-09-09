@@ -48,7 +48,7 @@ trap 'echo "!! Fallo en la actualización. Reabriendo el servicio..."; cleanup' 
 test -x "$PHP_BIN" || { echo "!! No se encuentra $PHP_BIN"; exit 1; }
 "$PHP_BIN" -r 'exit(version_compare(PHP_VERSION, "8.3.0", ">=") ? 0 : 1);' \
     || { echo "!! Se necesita PHP 8.3 o superior"; exit 1; }
-for ext in mbstring openssl pdo fileinfo tokenizer xml ctype json session; do
+for ext in mbstring openssl pdo pdo_mysql fileinfo tokenizer xml ctype json session; do
     "$PHP_BIN" -r "exit(extension_loaded('$ext') ? 0 : 1);" \
         || { echo "!! Falta la extensión PHP: $ext"; exit 1; }
 done
@@ -84,7 +84,7 @@ fi
 echo "-- Copia guardada en $BACKUP_DIR (.env.$STAMP)"
 
 # --- 3. Mantenimiento y actualización del código (sin sobrescribir nada local) ---
-"$PHP_BIN" artisan down --render="errors.503" || "$PHP_BIN" artisan down
+"$PHP_BIN" artisan down
 git -C "$APP_ROOT" fetch origin
 git -C "$APP_ROOT" merge --ff-only origin/main
 
