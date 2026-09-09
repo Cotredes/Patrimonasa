@@ -14,7 +14,8 @@
 /.zed
 /auth.json
 /node_modules
-/public/build
+# public/build SÍ se publica: es la interfaz compilada que usa producción (sin Node en el servidor).
+# public/hot sigue ignorado: solo existe durante `npm run dev`.
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage

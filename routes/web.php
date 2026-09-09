@@ -6,8 +6,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('guest')->group(function () {
     Route::get('/entrar', [PatrimonasaController::class, 'login'])->name('login');
     Route::post('/entrar', [PatrimonasaController::class, 'authenticate'])->name('login.store');
-    Route::get('/crear-cuenta', [PatrimonasaController::class, 'register'])->name('register');
-    Route::post('/crear-cuenta', [PatrimonasaController::class, 'storeUser'])->name('register.store');
 });
 
 Route::middleware('auth')->group(function () {

@@ -7,10 +7,8 @@ use App\Models\AssetPhoto;
 use App\Models\Category;
 use App\Models\Document;
 use App\Models\Reminder;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use ZipArchive;
@@ -31,29 +29,6 @@ class PatrimonasaController extends Controller
         $request->session()->regenerate();
 
         return redirect()->intended(route('home'))->with('success', 'Has entrado en Patrimonasa.');
-    }
-
-    public function register()
-    {
-        if (User::exists()) {
-            return redirect()->route('login')->withErrors(['email' => 'El registro está cerrado. Entra con tu cuenta familiar.']);
-        }
-
-        return view('auth.register');
-    }
-
-    public function storeUser(Request $request)
-    {
-        if (User::exists()) {
-            return redirect()->route('login')->withErrors(['email' => 'El registro está cerrado. Entra con tu cuenta familiar.']);
-        }
-
-        $data = $request->validate(['name' => ['required', 'string', 'max:100'], 'email' => ['required', 'email', 'unique:users'], 'password' => ['required', 'confirmed', 'min:8']]);
-        $data['password'] = Hash::make($data['password']);
-        $data['role'] = User::count() === 0 ? 'admin' : 'family';
-        Auth::login(User::create($data));
-
-        return redirect()->route('home')->with('success', 'Tu cuenta familiar está preparada.');
     }
 
     public function logout(Request $request)

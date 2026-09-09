@@ -43,30 +43,34 @@ class PatrimonasaFlowTest extends TestCase
         $this->assertDatabaseHas('assets', ['id' => $asset->id, 'deleted_at' => null]);
     }
 
-    public function test_registration_closes_after_first_account(): void
+    public function test_public_registration_does_not_exist(): void
     {
-        $this->get(route('register'))->assertOk();
-
-        $this->post(route('register.store'), [
-            'name' => 'Primera cuenta',
-            'email' => 'primera@familia.es',
-            'password' => 'secreta123',
-            'password_confirmation' => 'secreta123',
-        ])->assertRedirect(route('home'));
-
-        $this->assertEquals('admin', User::where('email', 'primera@familia.es')->firstOrFail()->role);
-
-        $this->post(route('logout'))->assertRedirect(route('login'));
-
-        $this->get(route('register'))->assertRedirect(route('login'));
-
-        $this->post(route('register.store'), [
+        $this->get('/crear-cuenta')->assertNotFound();
+        $this->post('/crear-cuenta', [
             'name' => 'Intruso',
             'email' => 'intruso@example.com',
             'password' => 'secreta123',
             'password_confirmation' => 'secreta123',
-        ])->assertRedirect(route('login'));
+        ])->assertNotFound();
 
         $this->assertDatabaseMissing('users', ['email' => 'intruso@example.com']);
+    }
+
+    public function test_admin_account_is_created_with_private_command(): void
+    {
+        $this->artisan('patrimonasa:crear-usuario', [
+            'email' => 'admin@familia.es',
+            '--nombre' => 'Admin',
+            '--password' => 'secreta123',
+        ])->assertSuccessful();
+
+        $admin = User::where('email', 'admin@familia.es')->firstOrFail();
+        $this->assertSame('admin', $admin->role);
+        $this->assertTrue($this->app['hash']->check('secreta123', $admin->password));
+
+        $this->post(route('login.store'), [
+            'email' => 'admin@familia.es',
+            'password' => 'secreta123',
+        ])->assertRedirect(route('home'));
     }
 }

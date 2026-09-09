@@ -82,3 +82,4 @@ vendor/bin/pint --test                # lint (fix: vendor/bin/pint)
 | 2026-09-09 | Repo | Primera subida completa a `origin/main`: historiales unificados conservando ambos inicios y código Patrimonasa publicado. |
 | 2026-09-09 | Despliegue | Preparación Loading (`patrimonio.casetashormigon.es`): build Vite verificado, registro cerrado tras la primera cuenta, plantilla `.env.production.example` y script `scripts/deploy-loading.sh` con copia, migraciones y cachés. Sin acceso SSH/SFTP configurado ni BD de producción todavía. |
 | 2026-09-09 | Despliegue | Ajustes del script (comprueba `pdo_mysql`, mantenimiento simple) y guía de ejecución manual: el usuario ejecuta los pasos por SSH con su acceso. |
+| 2026-09-09 | Despliegue | Flujo de comando único: `public/build` dentro de Git, script sin `pull` interno con copia real de BD y `.env` intocable, registro público eliminado y alta inicial por `patrimonasa:crear-usuario`. |

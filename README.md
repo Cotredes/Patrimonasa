@@ -76,15 +76,30 @@ vendor/bin/pint --test # estilo PHP
 
 Dominio: `https://patrimonio.casetashormigon.es` · Código en `/patrimonio.casetashormigon.es/app` · PHP `/ldnwebserver/php83/bin/php` (8.3).
 
-### Primera puesta en marcha
+### Primera instalación (una sola vez, por SSH en el servidor)
 
-1. **Raíz de documentos** del subdominio → carpeta `public` del proyecto (valor a indicar en el panel: `/patrimonio.casetashormigon.es/app/public`). Nunca la raíz del proyecto.
-2. **`.env`**: copiar `.env.production.example` a `.env`, rellenar `DB_*` y generar clave solo si no existe: `php artisan key:generate --force`.
-3. **Interfaz**: en local `npm run build`, anotar `git rev-parse HEAD > public/build/.deploy-commit` y subir `public/build` al servidor (sin Node allí).
-4. **Actualizar**: `bash /patrimonio.casetashormigon.es/app/scripts/deploy-loading.sh` (comprueba versión, extensiones, copia `.env`/BD, actualiza `main` sin sobrescribir nada, instala, migra y regenera cachés).
-5. **Primera cuenta**: entra en el dominio y usa «Crear cuenta familiar» (esa cuenta queda como administradora y el registro se cierra solo).
+1. **Raíz de documentos** del subdominio → `/patrimonio.casetashormigon.es/app/public`. Nunca la raíz del proyecto.
+2. **`.env`**: copiar `.env.production.example` a `.env`, rellenar `DB_*` con los datos del alojamiento y generar la clave: `/ldnwebserver/php83/bin/php artisan key:generate --force`.
+3. **Actualizar**: ejecutar el comando único de abajo. Crea las tablas con las migraciones (sin borrar nada).
+4. **Primera cuenta** (privada, por SSH): `/ldnwebserver/php83/bin/php artisan patrimonasa:crear-usuario tu@correo.es --nombre="Tu nombre" --admin`. No existe registro público: nadie puede apropiarse de la cuenta antes que tú.
 
-El registro público queda cerrado cuando ya existe una cuenta; los documentos y fotos solo se sirven a usuarios identificados. Si una actualización falla, el script reabre el servicio y deja copia en `../copias-seguridad`; detalles en la cabecera del script.
+### Publicar una nueva versión (desde este ordenador)
+
+```powershell
+npm run build          # genera public/build (va incluido en Git)
+composer test          # 6 pruebas en verde
+git add -A; git commit -m "Descripción del cambio"; git push origin main
+```
+
+### Actualizar el servidor (único comando, por SSH)
+
+```bash
+cd /patrimonio.casetashormigon.es/app && git pull --ff-only origin main && bash scripts/deploy-loading.sh
+```
+
+El script comprueba requisitos, valida `.env` (sin modificarlo jamás), guarda copia real de la base de datos, instala desde `composer.lock`, migra y regenera cachés. Si falla, reabre el servicio solo y deja la copia en `../copias-seguridad`; detalles en la cabecera del script.
+
+> Los documentos y fotos solo se sirven a usuarios identificados. El `.env`, la clave, la base de datos y los archivos subidos se conservan en cada actualización.
 
 ---
 
@@ -92,7 +107,7 @@ El registro público queda cerrado cuando ya existe una cuenta; los documentos y
 
 ### Disponible
 
-- Acceso privado con cuentas familiares; la primera cuenta se convierte en administradora y el registro se cierra automáticamente.
+- Acceso privado con cuentas familiares creadas por SSH; sin registro público.
 - Inicio con buscador global, categorías y accesos rápidos.
 - Crear, editar, marcar como favorito y archivar bienes sin formularios interminables.
 - Categorías creadas y archivadas desde la aplicación.
