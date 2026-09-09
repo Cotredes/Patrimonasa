@@ -32,7 +32,6 @@ PHP_BIN="/ldnwebserver/php83/bin/php"
 APP_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 COMPOSER_PHAR="$APP_ROOT/composer.phar"
 BACKUP_DIR="$APP_ROOT/../copias-seguridad"
-STAMP="$(date +%Y%m%d-%H%M%S)"
 
 cd "$APP_ROOT"
 echo "== Patrimonasa: actualizando en $APP_ROOT =="
@@ -43,11 +42,58 @@ cleanup() {
 }
 trap 'echo "!! Fallo en la actualización. Reabriendo el servicio..."; cleanup' ERR
 
+# Lectura de .env con PHP (el SSH restringido puede no traer cut/grep/tr).
+# Salidas: 0 = encontrada (imprime el valor, quizá vacío), 1 = no se puede leer, 2 = no existe.
 env_value() {
-    grep -E "^$1=" "$APP_ROOT/.env" | tail -n 1 | cut -d= -f2- | tr -d ' "'
+    "$PHP_BIN" -r '
+        [$envFile, $wanted] = [$argv[1], $argv[2]];
+        $lines = @file($envFile, FILE_IGNORE_NEW_LINES);
+        if ($lines === false) { exit(1); }
+        $found = false;
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if ($line === "" || $line[0] === "#" || !str_contains($line, "=")) { continue; }
+            [$k, $v] = explode("=", $line, 2);
+            if (trim($k) !== $wanted) { continue; }
+            $v = trim($v);
+            if (strlen($v) >= 2) {
+                $first = $v[0];
+                $last = substr($v, -1);
+                if (($first === "\"" && $last === "\"") || ($first === chr(39) && $last === chr(39))) {
+                    $v = substr($v, 1, -1);
+                }
+            }
+            $found = $v;
+        }
+        if ($found === false) {
+            exit(2);
+        }
+        echo $found;
+        exit(0);
+    ' "$APP_ROOT/.env" "$1"
+}
+
+# Comprueba una variable: distingue lectura fallida de valor vacío. No muestra valores.
+check_env_var() {
+    local var="$1" value rc
+    rc=0
+    value="$(env_value "$var" 2>/dev/null)" || rc=$?
+    if [ "$rc" -eq 1 ]; then
+        echo "!! No se puede leer $APP_ROOT/.env (permiso denegado o disco inaccesible)."
+        exit 1
+    fi
+    if [ "$rc" -ne 0 ] || [ -z "$value" ]; then
+        echo "!! En .env falta o está vacía: $var. Complétala y vuelve a ejecutar."
+        exit 1
+    fi
 }
 
 # --- 1. Comprobaciones previas (no cambian nada) ---
+for tool in git date mkdir cp; do
+    command -v "$tool" >/dev/null 2>&1 \
+        || { echo "!! Falta la herramienta del sistema: $tool. Avisanos con este mensaje."; exit 1; }
+done
+STAMP="$(date +%Y%m%d-%H%M%S)"
 test -x "$PHP_BIN" || { echo "!! No se encuentra $PHP_BIN"; exit 1; }
 "$PHP_BIN" -r 'exit(version_compare(PHP_VERSION, "8.3.0", ">=") ? 0 : 1);' \
     || { echo "!! Se necesita PHP 8.3 o superior"; exit 1; }
@@ -67,18 +113,19 @@ foreach ($manifest as $entry) {
 }' "$APP_ROOT/public/build/manifest.json" \
     || { echo "!! public/build está incompleto (manifiesto vacío o faltan archivos)"; exit 1; }
 
-# --- 2. .env: debe existir y estar completo. Jamás se toca. ---
+# --- 2. .env: debe existir, poder leerse y estar completo. Jamás se toca. ---
 if [ ! -f "$APP_ROOT/.env" ]; then
     echo "!! Falta $APP_ROOT/.env — primera instalación sin terminar."
     echo "   Cópialo desde .env.production.example, rellena DB_* y genera la clave con:"
     echo "   $PHP_BIN artisan key:generate --force"
     exit 1
 fi
+if [ ! -r "$APP_ROOT/.env" ]; then
+    echo "!! No se puede leer $APP_ROOT/.env (permiso denegado). Revisa sus permisos."
+    exit 1
+fi
 for var in APP_KEY APP_URL DB_CONNECTION DB_DATABASE DB_USERNAME DB_PASSWORD; do
-    if [ -z "$(env_value "$var")" ]; then
-        echo "!! En .env falta o está vacía: $var. Complétala y vuelve a ejecutar."
-        exit 1
-    fi
+    check_env_var "$var"
 done
 echo "-- .env presente y completo (no se modifica)."
 
