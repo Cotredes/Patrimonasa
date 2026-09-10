@@ -42,6 +42,7 @@
             <label><span class="label">Número de bastidor / serie</span><input class="field" name="vin" value="{{ old('vin', $asset->details['vin'] ?? '') }}"></label>
             <label><span class="label">Lugar donde está</span><input class="field" name="location" value="{{ old('location', $asset->details['location'] ?? '') }}"></label>
             <label><span class="label">Referencia catastral / parcela</span><input class="field" name="cadastral_reference" value="{{ old('cadastral_reference', $asset->details['cadastral_reference'] ?? '') }}"></label>
+            <label class="sm:col-span-2"><span class="label">Ubicación en Google Maps</span><input class="field" type="url" name="map_url" inputmode="url" placeholder="https://maps.google.com/…" value="{{ old('map_url', $asset->details['map_url'] ?? '') }}"><small class="mt-2 block muted">Abre Google Maps, busca el lugar, pulsa Compartir y pega aquí el enlace.</small></label>
         </div>
 
         <details class="rounded-xl bg-[#f4f6f0] p-4">
@@ -51,7 +52,6 @@
                 <label><span class="label">Año</span><input class="field" type="number" name="year" min="1900" max="2100" value="{{ old('year', $asset->details['year'] ?? '') }}"></label>
                 <label><span class="label">Polígono y parcela</span><input class="field" name="plot" value="{{ old('plot', $asset->details['plot'] ?? '') }}"></label>
                 <label><span class="label">Tipo o uso del terreno</span><input class="field" name="land_use" value="{{ old('land_use', $asset->details['land_use'] ?? '') }}"></label>
-                <label class="sm:col-span-2"><span class="label">Enlace para consultar el mapa</span><input class="field" type="url" name="map_url" value="{{ old('map_url', $asset->details['map_url'] ?? '') }}"></label>
             </div>
         </details>
 

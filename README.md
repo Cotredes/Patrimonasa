@@ -125,13 +125,14 @@ Si esa página diera 404 aun con el token correcto, hay una vieja caché de conf
 - Inicio con buscador global, categorías y accesos rápidos.
 - Crear, editar, marcar como favorito y archivar bienes sin formularios interminables.
 - Categorías creadas y archivadas desde la aplicación.
-- Subida múltiple de documentos y fotos desde ordenador o móvil, conservando el archivo original.
+- Subida múltiple de documentos y fotos desde ordenador o móvil, conservando el archivo original. Las fotos se guardan solas al elegirlas.
 - Documentos protegidos por sesión, consulta en el navegador, descarga y exportación ZIP por bien.
 - Búsqueda por nombre, datos del bien, título, tipo y nombre del archivo.
+- Ubicación de Google Maps por bien, con botón directo en su ficha.
 - Recordatorios de fechas, papelera y restauración.
 - Manifest y service worker básicos para instalar Patrimonasa desde Chrome como aplicación.
 - Firma cálida y visible en todas las pantallas: **«Hecho por Ángel Muñoz con mucho cariño»**.
-- Flecha «Volver» grande y clara en todas las pantallas internas, con alternativa directa si se entra por enlace.
+- Flecha «Volver» grande y clara en todas las pantallas internas, solo la flecha y con alternativa directa si se entra por enlace.
 
 ### Pendiente de una siguiente iteración
 

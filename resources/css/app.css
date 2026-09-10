@@ -28,7 +28,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .quiet-button:hover { background:#eef3ed; }
 .danger-button { color:#9a402e; background:#fff0ec; }
 .back-wrap { margin-bottom:1.25rem; }
-.back-button { display:inline-flex; align-items:center; gap:.7rem; min-height:3.25rem; padding:.6rem 1.1rem .6rem .6rem; border-radius:999px; background:#fff; border:2px solid #2f6655; color:#244f42; font-weight:800; font-size:1.05rem; line-height:1; box-shadow:0 6px 18px rgba(36,53,47,.08); transition:transform .15s ease, background .15s ease; }
+.back-button { display:inline-flex; align-items:center; justify-content:center; min-height:3.25rem; min-width:3.25rem; padding:.4rem; border-radius:999px; background:#fff; border:2px solid #2f6655; color:#244f42; font-weight:800; font-size:1.05rem; line-height:1; box-shadow:0 6px 18px rgba(36,53,47,.08); transition:transform .15s ease, background .15s ease; }
 .back-button:hover { background:#e8f0e9; transform:translateX(-2px); }
 .back-arrow { display:grid; place-items:center; width:2.4rem; height:2.4rem; border-radius:999px; background:#2f6655; color:#fff; font-size:1.35rem; font-weight:800; flex:none; }
 .page-head { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap; }

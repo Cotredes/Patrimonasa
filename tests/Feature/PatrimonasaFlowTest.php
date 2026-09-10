@@ -43,6 +43,34 @@ class PatrimonasaFlowTest extends TestCase
         $this->assertDatabaseHas('assets', ['id' => $asset->id, 'deleted_at' => null]);
     }
 
+    public function test_asset_shows_maps_link_auto_upload_and_arrow_back(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::create(['name' => 'Viviendas', 'icon' => 'home', 'position' => 0]);
+        $asset = Asset::create([
+            'category_id' => $category->id,
+            'name' => 'Casa del pueblo',
+            'slug' => 'casa-del-pueblo',
+            'details' => ['map_url' => 'https://maps.google.com/?q=Casa'],
+        ]);
+        $sinMapa = Asset::create([
+            'category_id' => $category->id,
+            'name' => 'Piso sin mapa',
+            'slug' => 'piso-sin-mapa',
+        ]);
+
+        $html = $this->actingAs($user)->get(route('assets.show', $asset))->assertOk()->getContent();
+        $this->assertStringContainsString('Ver en Google Maps', $html);
+        $this->assertStringContainsString('https://maps.google.com/?q=Casa', $html);
+        $this->assertStringContainsString('data-auto-upload', $html);
+        $this->assertStringContainsString('<noscript>', $html);
+        $this->assertStringContainsString('aria-label="Volver a Mis bienes"', $html);
+        $this->assertStringNotContainsString('>Volver a Mis bienes<', $html);
+
+        $htmlSinMapa = $this->actingAs($user)->get(route('assets.show', $sinMapa))->assertOk()->getContent();
+        $this->assertStringNotContainsString('Ver en Google Maps', $htmlSinMapa);
+    }
+
     public function test_public_registration_does_not_exist(): void
     {
         $this->get('/crear-cuenta')->assertNotFound();

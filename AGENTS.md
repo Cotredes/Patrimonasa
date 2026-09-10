@@ -86,3 +86,4 @@ vendor/bin/pint --test                # lint (fix: vendor/bin/pint)
 | 2026-09-09 | Despliegue | Flujo de comando único: `public/build` dentro de Git, script sin `pull` interno con copia real de BD y `.env` intocable, registro público eliminado y alta inicial por `patrimonasa:crear-usuario`. |
 | 2026-09-09 | Despliegue | Corrección del script para SSH restringido: lectura de `.env` con PHP (sin `cut`/`grep`), prechequeo de herramientas y dos errores reales detectados por pruebas (valor sobrescrito y variable sin asignar). |
 | 2026-09-09 | App | Corrección del error 419 en producción: esquema `https` forzado según `APP_URL` (el proxy entrega HTTP y la cookie segura no volvía), diagnóstico temporal `/diag-sesion` con token y pruebas con CSRF realmente activo. |
+| 2026-09-09 | UX | Fotos que se guardan solas al elegirlas (sin botón Guardar), flecha Volver solo con la flecha y ubicación de Google Maps por bien con botón directo en su ficha. |

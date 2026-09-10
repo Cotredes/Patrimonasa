@@ -24,6 +24,7 @@
             <div class="mt-7 flex flex-wrap gap-3">
                 <a class="primary-button" href="#documentos">+ Añadir documento</a>
                 <a class="soft-button" href="#fotos">+ Añadir fotos</a>
+                @if(!empty($asset->details['map_url']))<a class="soft-button" href="{{ $asset->details['map_url'] }}" target="_blank" rel="noopener">Ver en Google Maps</a>@endif
             </div>
         </div>
     </div>
@@ -99,10 +100,12 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('photos.store', $asset) }}" enctype="multipart/form-data" class="paper-card mt-4 p-5">
+        <form method="POST" action="{{ route('photos.store', $asset) }}" enctype="multipart/form-data" class="paper-card mt-4 p-5" data-auto-upload>
             @csrf
-            <label><span class="label">Añadir fotos</span><input class="field" type="file" name="photos[]" multiple accept="image/*" required></label>
-            <button class="soft-button mt-4 w-full" type="submit">Guardar fotografías</button>
+            <label><span class="label">Añadir fotos</span><input class="field" type="file" name="photos[]" multiple accept="image/*" required data-auto-upload-input></label>
+            <p class="mt-2 text-sm muted">Se guardan solas en cuanto las eliges, sin pulsar nada más.</p>
+            <p class="mt-2 text-sm muted" data-upload-status hidden>Subiendo fotos… no cierres esta página.</p>
+            <noscript><button class="soft-button mt-4 w-full" type="submit">Guardar fotografías</button></noscript>
         </form>
 
         <div class="paper-card mt-6 p-5">
@@ -112,6 +115,7 @@
             @else
                 <dl class="mt-3 space-y-3">
                     @foreach($asset->details ?? [] as $key => $value)
+                        @if($key === 'map_url') @continue @endif
                         <div class="flex justify-between gap-3 border-b border-[#edf0ea] pb-2">
                             <dt class="muted">{{ str_replace('_', ' ', ucfirst($key)) }}</dt>
                             <dd class="text-right font-semibold">{{ $value }}</dd>
