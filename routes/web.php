@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DiagnosticoSesionController;
 use App\Http\Controllers\PatrimonasaController;
 use Illuminate\Support\Facades\Route;
 
@@ -7,6 +8,10 @@ Route::middleware('guest')->group(function () {
     Route::get('/entrar', [PatrimonasaController::class, 'login'])->name('login');
     Route::post('/entrar', [PatrimonasaController::class, 'authenticate'])->name('login.store');
 });
+
+// Diagnóstico TEMPORAL del error 419: responde solo con el token de DIAGNOSTIC_TOKEN.
+// Para retirarlo, borra esa variable del .env y elimina esta ruta, su controlador y su vista.
+Route::get('/diag-sesion', [DiagnosticoSesionController::class, 'show'])->name('diag.sesion');
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [PatrimonasaController::class, 'home'])->name('home');

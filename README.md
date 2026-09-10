@@ -101,6 +101,20 @@ El script comprueba requisitos, valida `.env` (sin modificarlo jamás), guarda c
 
 > Los documentos y fotos solo se sirven a usuarios identificados. El `.env`, la clave, la base de datos y los archivos subidos se conservan en cada actualización.
 
+### Error 419 al entrar (producción)
+
+Causa encontrada: detrás del proxy, PHP recibe la petición en HTTP aunque se visite en HTTPS. Sin corrección, la página generaba el formulario hacia `http://` y el navegador no enviaba la cookie de sesión (segura) al enviarlo, así que cada intento creaba una sesión vacía. Desde esta versión las direcciones se generan en `https` cuando `APP_URL` es `https`, sin confiar en cabeceras del proxy. El CSRF sigue activo y la clave no se toca.
+
+Si el error continuara, hay un diagnóstico temporal (`/diag-sesion`) que no muestra secretos:
+
+1. Por SSH, genera un token y añádelo al `.env` (nunca uses `config:cache` desde SSH):
+   `/ldnwebserver/php83/bin/php -r 'echo bin2hex(random_bytes(24)).PHP_EOL;'`
+   y añade la línea `DIAGNOSTIC_TOKEN=valor-generado`.
+2. Abre `https://patrimonio.casetashormigon.es/diag-sesion?t=valor-generado` dos veces seguidas y anota lo que indica cada fila.
+3. Para retirarlo: borra la línea del `.env` (se desactiva al instante) y avísame para eliminarlo del código.
+
+Si esa página diera 404 aun con el token correcto, hay una vieja caché de configuración con otras rutas: borra `bootstrap/cache/config.php` en el servidor.
+
 ---
 
 ## ✅ Estado y pendientes

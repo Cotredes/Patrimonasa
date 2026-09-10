@@ -77,6 +77,7 @@ vendor/bin/pint --test                # lint (fix: vendor/bin/pint)
 | 2026-09-09 | Calidad | Tests Feature para alta/subida/restauración, migraciones ejecutadas, vistas compiladas, Pint y Vite verificados correctamente. |
 | 2026-09-09 | UX | Formularios de documentos editables, primera cuenta con rol administrador y categorías inicializadas aunque se entre directamente por una ruta secundaria. |
 | 2026-09-09 | Datos locales | Cuenta familiar de Pedro creada en la base de datos local. La contraseña no se guarda en el repositorio ni en esta guía. |
+| 2026-09-09 | Datos locales | Segunda cuenta familiar (Ángel) creada en la base de datos local. Tampoco se guarda su contraseña en el repositorio. |
 | 2026-09-09 | UX | Firma visible y animada en el pie de la interfaz: «Hecho por Ángel Muñoz con mucho cariño», con respeto por la reducción de movimiento. |
 | 2026-09-09 | UX | Navegación con flecha «Volver» grande y visible en todas las pantallas internas, corrección de errores de diseño (cabeceras móviles, acciones de fotos táctiles, desplegable de categorías y resultados de búsqueda con bienes y documentos). |
 | 2026-09-09 | Repo | Primera subida completa a `origin/main`: historiales unificados conservando ambos inicios y código Patrimonasa publicado. |
@@ -84,3 +85,4 @@ vendor/bin/pint --test                # lint (fix: vendor/bin/pint)
 | 2026-09-09 | Despliegue | Ajustes del script (comprueba `pdo_mysql`, mantenimiento simple) y guía de ejecución manual: el usuario ejecuta los pasos por SSH con su acceso. |
 | 2026-09-09 | Despliegue | Flujo de comando único: `public/build` dentro de Git, script sin `pull` interno con copia real de BD y `.env` intocable, registro público eliminado y alta inicial por `patrimonasa:crear-usuario`. |
 | 2026-09-09 | Despliegue | Corrección del script para SSH restringido: lectura de `.env` con PHP (sin `cut`/`grep`), prechequeo de herramientas y dos errores reales detectados por pruebas (valor sobrescrito y variable sin asignar). |
+| 2026-09-09 | App | Corrección del error 419 en producción: esquema `https` forzado según `APP_URL` (el proxy entrega HTTP y la cookie segura no volvía), diagnóstico temporal `/diag-sesion` con token y pruebas con CSRF realmente activo. |
