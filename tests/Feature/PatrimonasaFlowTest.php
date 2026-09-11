@@ -43,6 +43,23 @@ class PatrimonasaFlowTest extends TestCase
         $this->assertDatabaseHas('assets', ['id' => $asset->id, 'deleted_at' => null]);
     }
 
+    public function test_family_member_can_upload_photos(): void
+    {
+        Storage::fake('local');
+        $user = User::factory()->create();
+        $category = Category::create(['name' => 'Viviendas', 'icon' => 'home', 'position' => 0]);
+        $asset = Asset::create(['category_id' => $category->id, 'name' => 'Casa del pueblo', 'slug' => 'casa-del-pueblo']);
+
+        $this->actingAs($user)->post(route('photos.store', $asset), [
+            'photos' => [UploadedFile::fake()->image('casa.jpg'), UploadedFile::fake()->image('jardin.png')],
+        ])->assertRedirect()->assertSessionHas('success');
+
+        $this->assertSame(2, $asset->photos()->count());
+        foreach ($asset->photos as $photo) {
+            Storage::disk('local')->assertExists($photo->path);
+        }
+    }
+
     public function test_asset_shows_maps_link_auto_upload_and_arrow_back(): void
     {
         $user = User::factory()->create();

@@ -222,7 +222,14 @@ class PatrimonasaController extends Controller
 
     public function storePhotos(Request $request, Asset $asset)
     {
-        $request->validate(['photos' => ['required', 'array'], 'photos.*' => ['image', 'max:20480']]);
+        $request->validate(
+            ['photos' => ['required', 'array'], 'photos.*' => ['image', 'max:20480']],
+            [
+                'photos.required' => 'Elige al menos una fotografía para subirla.',
+                'photos.*.image' => 'Solo se pueden subir fotografías (JPG, PNG o WebP).',
+                'photos.*.max' => 'Cada fotografía debe pesar menos de 20 MB.',
+            ]
+        );
         foreach ($request->file('photos', []) as $photo) {
             $asset->photos()->create(['path' => $photo->store('photos'), 'position' => $asset->photos()->count()]);
         }
